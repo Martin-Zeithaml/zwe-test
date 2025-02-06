@@ -8,6 +8,10 @@ Simple testing framework for `zwe` command
 * Existing `zowe.runtimeDirectory`
   * Convenience build
 
+## Start
+
+Clone this repository to `uss`.
+
 ## Initialization
 
 Run `initTemplate.sh` with path to `zowe.runtimeDirectory` as a parameter:
@@ -18,6 +22,7 @@ $ ./initTemplate.sh /u/charles/zowe/
 ## Verify zwe-test
 
 Run `run_test.sh`, there is one predefined test: help for `zwe` command.
+If you can see the help, it was set correctly.
 
 ## Adding new tests
 
