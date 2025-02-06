@@ -3,41 +3,13 @@ import * as testCases from './testCases';
 import * as print from './lib/print';
 import * as ds from './lib/ds';
 import * as misc from './lib/misc';
+import * as env from './lib/env';
 
 const RUNTIME='@RUNTIME@'
 const ZWE=`${RUNTIME}/bin/zwe`;
 const EXPORT = `export ZWE_PRIVATE_CLI_LIBRARY_LOADED=''`;  // Bypassing the bug
 const SEVERITY = { INFO: 0, OTHER: 1, ERROR: 2 }
 const PRINT = true;
-const ENV_KEEP = 1;
-const ENV_RESTORE = 2;
-
-const EXAMPLE = {
-    test1: {
-        desc: "Description of the test scenario",
-        environment: [
-            [ 'ZWE_CLI_PARAMETER_CONFIG', `${print.wrap('./file', 'ZOWE.PARMLIB(XYZ)')}` ],
-            [ 'NODE_HOME', '/dev/null' ]
-        ],
-        before: {
-            listMB: 'ZOWE.PARMLIB', // List memnbers
-            deleteDS: 'ZOWE.TMP', // Delete
-            shellCmd: 'cat ./zowe.yaml && echo "Hello, world"'   // Shell command
-        },
-        expected: {
-            rc: 123,                      // If not specified => 0
-            out: 'File not found',        // Entire output
-            substr: ['To be found 1', 'To be found 2'],  // Substring in output
-            substrx: ['Not to be found 1', 'Not to be found 2']  // Substring not in output
-        },
-        parms: `init -c "${print.wrapAndEscape('./file1', './file2')}"`,   // Parameters, wrapAndEscape will escape \$
-        after: {
-            listMB: 'ZOWE.SZWESAMP',
-            deleteDS: 'ZOWE.TMP',
-            shellCmd: 'rm ./zowe.yaml'
-        }
-    }
-}
 
 const TESTS = {
     ...testCases.ALL
@@ -70,7 +42,7 @@ let currentTest = 1;
 let afterEnvironment = [];
 
 // For sure, unset ZWE_CLI_PARAMETER_CONFIG
-misc.unExportEnv('ZWE_CLI_PARAMETER_CONFIG');
+env.exportEnv('ZWE_CLI_PARAMETER_CONFIG', '');
 
 const loopStart = Date.now();
 
@@ -109,7 +81,7 @@ for (let test in TESTS) {
             if (env[2] === ENV_RESTORE) {
                 afterEnvironment.push([env[0], `${std.getenv(`${env[0]}`)}`]);
             }
-            misc.exportEnv(env[0], env[1]);
+            env.exportEnv(env[0], env[1]);
         })
     }
     if (TESTS[test].before) {
@@ -148,7 +120,7 @@ for (let test in TESTS) {
     // *** After actions ***
     if (afterEnvironment.length) {
         afterEnvironment.forEach(env => {
-            misc.exportEnv(env[0], env[1]);
+            env.exportEnv(env[0], env[1]);
         })
     }
     if (TESTS[test].after) {
@@ -162,7 +134,6 @@ for (let test in TESTS) {
     print.debug(`${counter}`, '-'.repeat(32) + "\n", print.YELLOW);
 
 }
-
 
 const loopEnd = Date.now();
 print.debug('Time elapsed', `${new Date(loopEnd-loopStart).toISOString().slice(11,19)}`)
