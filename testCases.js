@@ -1,4 +1,4 @@
-import * as yaml from './yaml';
+import * as yaml from './yamlFiles';
 import * as misc from './lib/misc';
 import * as print from './lib/print';
 import * as env from './lib/env'

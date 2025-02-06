@@ -71,7 +71,7 @@ export const ALL = {
 
 ### YAML
 
-`yaml.js` is used for creating YAML files, it is possible to save it as unix file or member. YAML is created from text, it is up to you to follow YAML syntax (no schema validation).
+`yamlFiles.js` is used for creating YAML files, it is possible to save it as unix file or member. YAML is created from text, it is up to you to follow YAML syntax (no schema validation).
 
 Corresponding definition for previous test example:
 
