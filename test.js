@@ -9,6 +9,8 @@ const ZWE=`${RUNTIME}/bin/zwe`;
 const EXPORT = `export ZWE_PRIVATE_CLI_LIBRARY_LOADED=''`;  // Bypassing the bug
 const SEVERITY = { INFO: 0, OTHER: 1, ERROR: 2 }
 const PRINT = true;
+const ENV_KEEP = 1;
+const ENV_RESTORE = 2;
 
 const EXAMPLE = {
     test1: {
@@ -65,6 +67,7 @@ let results = [];
 const total = Object.keys(TESTS).length;
 const totalLength = total.toString().length;
 let currentTest = 1;
+let afterEnvironment = [];
 
 // For sure, unset ZWE_CLI_PARAMETER_CONFIG
 misc.unExportEnv('ZWE_CLI_PARAMETER_CONFIG');
@@ -100,6 +103,12 @@ for (let test in TESTS) {
     print.debug(`${counter}`, rest, print.YELLOW);
     if (TESTS[test].environment) {
         TESTS[test].environment.forEach(env => {
+            if (env[2] === undefined) {
+                afterEnvironment.push([env[0], '']);
+            }
+            if (env[2] === ENV_RESTORE) {
+                afterEnvironment.push([env[0], `${std.getenv(`${env[0]}`)}`]);
+            }
             misc.exportEnv(env[0], env[1]);
         })
     }
@@ -137,9 +146,9 @@ for (let test in TESTS) {
     subStringInResult(expectedSubStrX, false, result, results, skipCounter);
 
     // *** After actions ***
-    if (TESTS[test].environment) {
-        TESTS[test].environment.forEach(env => {
-            misc.unExportEnv(env[0]);
+    if (afterEnvironment.length) {
+        afterEnvironment.forEach(env => {
+            misc.exportEnv(env[0], env[1]);
         })
     }
     if (TESTS[test].after) {
