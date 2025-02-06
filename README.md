@@ -40,7 +40,7 @@ export const ALL = {
     zweInstallExample: {
         desc: 'zwe install',
         environment: [
-            [ 'NODE_HOME', '' , ENV_KEEP]
+            [ 'NODE_HOME', '' , env.KEEP]
         ],
         expected: {
             rc: 0,
