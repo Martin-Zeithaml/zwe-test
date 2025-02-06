@@ -61,7 +61,7 @@ export const ALL = {
 * `desc` - description of a test
 * `before` and `after` actions
   * `listDS`, `listMB`, `deleteDS`, `allocJCL`, `allocLoad` and `shellCmd`
-* `environment` variables, keep, restored or unset at the end of the current test
+* `environment` variables, keep, restore or unset at the end of the current test
 * `expected` - if omitted, it is expected `rc=0`
   * `rc` - return code
   * `substr` - substring to be found
