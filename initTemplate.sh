@@ -19,7 +19,7 @@ cd "${currentDirectory}"
 allFiles="lib/ds.js lib/misc.js lib/print.js zowe.env test.js"
 for f in $allFiles; do
     echo "Changing ${f}"
-    cat "${f}" | awk '{ gsub(/@RUNTIME@/, "${zoweRuntime}"); print } ' > "${f}.tmp" && mv "${f}.tmp" "${f}"
+    cat "${f}" | awk -v zr="${zoweRuntime}" '{ gsub(/@RUNTIME@/, zr); print } ' > "${f}.tmp" && mv "${f}.tmp" "${f}"
 done
 
 failed=

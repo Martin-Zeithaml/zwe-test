@@ -10,11 +10,6 @@ if [ "${1}" = "-p" ]; then
     exit
 fi
 
-if [ "${1}" = "-x" ]; then
-    rm -rf ./logs/*
-    shift
-fi
-
 if [ -z "${1}" ]; then
     FILE="./test.js"
 else
