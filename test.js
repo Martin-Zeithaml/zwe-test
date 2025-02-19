@@ -11,34 +11,22 @@ const ZWE = `${RUNTIME}/bin/zwe`;
 const CONFIGMGR = `${RUNTIME}/bin/utils/configmgr`;
 const CONFIGMGR_SCRIPT = `${CONFIGMGR} -script`;
 const EXPORT = `export ZWE_PRIVATE_CLI_LIBRARY_LOADED=''`;  // Bypassing the bug
-const SEVERITY = { INFO: 0, OTHER: 1, ERROR: 2 }
 const PRINT = true;
 
 const TESTS = {
     ...testCases.ALL
 }
 
-function subStringInResult(expected, included, result, results, skipCounter) {
-    if (expected) {
-        const INCLUDED_INFO = included == true ? SEVERITY.INFO : SEVERITY.ERROR;
-        const INCLUDED_ERROR = included == true ? SEVERITY.ERROR : SEVERITY.INFO;
-        let expectedArray = [];
-        if (typeof expected == 'object') {
-            expectedArray = expected;
-        } else {
-            expectedArray[0] = expected;
-        }
-        for (let str in expectedArray) {
-            if (result.out.includes(expectedArray[str])) {
-                results.push(print.formatMsg(INCLUDED_INFO, PRINT, skipCounter, `'${expectedArray[str]}' found`, ''));
-            } else {
-                results.push(print.formatMsg(INCLUDED_ERROR, PRINT, skipCounter, `'${expectedArray[str]}' not found`, ''));
-            }
-        }
-    }
+function beforeOrAfterActions(actions) {
+    ds.allocJCL(actions.allocJCL);
+    ds.allocLoad(actions.allocLoad);
+    ds.listMB(actions.listMB);
+    ds.listDS(actions.listDS)
+    ds.deleteDS(actions.deleteDS);
+    misc.shellCmd(actions.shellCmd);
 }
 
-let results = [];
+let testResults = [];
 const total = Object.keys(TESTS).length;
 const totalLength = total.toString().length;
 let currentTest = 1;
@@ -98,14 +86,7 @@ for (let test in TESTS) {
             env.exportEnv(env[0], env[1]);
         })
     }
-    if (TESTS[test].before) {
-        ds.allocJCL(TESTS[test].before.allocJCL);
-        ds.allocLoad(TESTS[test].before.allocLoad);
-        ds.listMB(TESTS[test].before.listMB);
-        ds.listDS(TESTS[test].before.listDS)
-        ds.deleteDS(TESTS[test].before.deleteDS);
-        misc.shellCmd(TESTS[test].before.shellCmd);
-    }
+    beforeOrAfterActions(TESTS[test].before);
 
     let result;
     if (TESTS[test].parms) {
@@ -119,23 +100,24 @@ for (let test in TESTS) {
     let info = `expected rc=${expectedRC.toString().padStart(3)}, result rc=${result.rc.toString().padStart(3)}`;
 
     if (result.rc == expectedRC) {
-        results.push(print.formatMsg(SEVERITY.INFO, PRINT, counter, info, rest));
+        testResults.push(print.formatMsg(misc.SEVERITY_NUM.INFO, PRINT, counter, info, rest));
     } else {
-        results.push(print.formatMsg(SEVERITY.ERROR, PRINT, counter, info, rest));
+        testResults.push(print.formatMsg(misc.SEVERITY_NUM.ERROR, PRINT, counter, info, rest));
     }
     const skipCounter = ' '.repeat(counter.length);
     if (expectedOut || expectedOut == '') {
         if (result.out == expectedOut) {
-            results.push(print.formatMsg(SEVERITY.INFO, PRINT, skipCounter, 'output match', ''));
+            testResults.push(print.formatMsg(misc.SEVERITY_NUM.INFO, PRINT, skipCounter, 'output match', ''));
         } else {
-            results.push(print.formatMsg(SEVERITY.ERROR, PRINT, skipCounter, 'output not matched', ''));
+            testResults.push(print.formatMsg(misc.SEVERITY_NUM.ERROR, PRINT, skipCounter, 'output not matched', ''));
         }
     }
     if (description) {
-        results.push(print.formatMsg(SEVERITY.OTHER, PRINT, skipCounter, 'Description', description));
+        testResults.push(print.formatMsg(misc.SEVERITY_NUM.OTHER, PRINT, skipCounter, 'Description', description));
     }
-    subStringInResult(expectedSubStr, true, result, results, skipCounter);
-    subStringInResult(expectedSubStrX, false, result, results, skipCounter);
+
+    misc.subStringInResult(expectedSubStr, true, result, testResults, skipCounter, PRINT);
+    misc.subStringInResult(expectedSubStrX, false, result, testResults, skipCounter, PRINT);
 
     // *** After actions ***
     if (afterEnvironment.length) {
@@ -143,14 +125,8 @@ for (let test in TESTS) {
             env.exportEnv(env[0], env[1]);
         })
     }
-    if (TESTS[test].after) {
-        ds.allocJCL(TESTS[test].after.allocJCL);
-        ds.allocLoad(TESTS[test].after.allocLoad);
-        ds.listMB(TESTS[test].after.listMB);
-        ds.listDS(TESTS[test].after.listDS)
-        ds.deleteDS(TESTS[test].after.deleteDS);
-        misc.shellCmd(TESTS[test].after.shellCmd);
-    }
+    beforeOrAfterActions(TESTS[test].after);
+
     print.debug(`${counter}`, '-'.repeat(32) + "\n", print.YELLOW);
 
 }
@@ -159,6 +135,6 @@ const loopEnd = Date.now();
 print.debug('Time elapsed', `${new Date(loopEnd-loopStart).toISOString().slice(11,19)}`)
 
 console.log(print.CYAN + `${print.decorate('test overview')}` + print.RESET);
-results.forEach(res => {
+testResults.forEach(res => {
     console.log(res);
 })
