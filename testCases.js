@@ -21,7 +21,8 @@ const EXAMPLE = {
             substr: ['To be found 1', 'To be found 2'],             // Substring in output
             substrx: ['Not to be found 1', 'Not to be found 2']     // Substring not in output
         },
-        parms: `init -c "${print.wrapAndEscape('./file$1', './file$2')}"`,   // Parameters, wrapAndEscape will escape \$
+        parms: `init -c "${print.wrapAndEscape('./file$1', './file$2')}"`,  // Parameters, wrapAndEscape will escape \$
+        script: './test1.js',                                               // Mutually exclusive with parms
         after: {
             listMB: 'ZOWE.SZWESAMP',
             deleteDS: 'ZOWE.TMP',
@@ -34,5 +35,10 @@ export const ALL = {
     zweHelp: {
         expected: 100,
         parms: '--help'
+    },
+    helloWorld: {
+        expected: 0,
+        substr: 'Hello, world!',
+        script: './scripts/helloWorld.js'
     }
 };

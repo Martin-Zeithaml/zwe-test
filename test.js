@@ -1,3 +1,4 @@
+import * as std from 'cm_std';
 import * as shell from '@RUNTIME@/bin/libs/shell'
 import * as testCases from './testCases';
 import * as print from './lib/print';
@@ -5,8 +6,10 @@ import * as ds from './lib/ds';
 import * as misc from './lib/misc';
 import * as env from './lib/env';
 
-const RUNTIME='@RUNTIME@'
-const ZWE=`${RUNTIME}/bin/zwe`;
+const RUNTIME = '@RUNTIME@'
+const ZWE = `${RUNTIME}/bin/zwe`;
+const CONFIGMGR = `${RUNTIME}/bin/utils/configmgr`;
+const CONFIGMGR_SCRIPT = `${CONFIGMGR} -script`;
 const EXPORT = `export ZWE_PRIVATE_CLI_LIBRARY_LOADED=''`;  // Bypassing the bug
 const SEVERITY = { INFO: 0, OTHER: 1, ERROR: 2 }
 const PRINT = true;
@@ -93,7 +96,16 @@ for (let test in TESTS) {
         misc.shellCmd(TESTS[test].before.shellCmd);
     }
 
-    const result = shell.execOutSync('sh', '-c', `${EXPORT} && ${ZWE} ${TESTS[test].parms}`);
+    let result;
+    if (Boolean(parms) !== Boolean(script)) {
+        console.log('Only one must be defined: "parms" and "script"');
+        std.exit(1);
+    }
+    if (parms) {
+        result = shell.execOutSync('sh', '-c', `${EXPORT} && ${ZWE} ${TESTS[test].parms}`);
+    } else {
+        result = shell.execOutSync('sh', '-c', `${CONFIGMGR_SCRIPT} ${TESTS[test].script}`);
+    }
     print.debug('Output', "\n" + result.out);
 
     let info = `expected rc=${expectedRC.toString().padStart(3)}, result rc=${result.rc.toString().padStart(3)}`;

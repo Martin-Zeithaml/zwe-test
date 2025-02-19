@@ -22,7 +22,7 @@ $ ./initTemplate.sh /u/charles/zowe/
 ## Verify zwe-test
 
 Run `run_test.sh`, there is one predefined test: help for `zwe` command.
-If you can see the help, it was set correctly.
+If you can see the help and `Hello, world!`, it was set correctly.
 
 ## Adding new tests
 
