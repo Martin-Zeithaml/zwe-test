@@ -18,12 +18,14 @@ const TESTS = {
 }
 
 function beforeOrAfterActions(actions) {
-    ds.allocJCL(actions.allocJCL);
-    ds.allocLoad(actions.allocLoad);
-    ds.listMB(actions.listMB);
-    ds.listDS(actions.listDS)
-    ds.deleteDS(actions.deleteDS);
-    misc.shellCmd(actions.shellCmd);
+    if (actions) {
+        ds.allocJCL(actions.allocJCL);
+        ds.allocLoad(actions.allocLoad);
+        ds.listMB(actions.listMB);
+        ds.listDS(actions.listDS)
+        ds.deleteDS(actions.deleteDS);
+        misc.shellCmd(actions.shellCmd);
+    }
 }
 
 let testResults = [];
