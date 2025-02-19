@@ -53,7 +53,18 @@ for (let test in TESTS) {
 
     let counter = `${currentTest.toString().padStart(totalLength)}/${total}`;
     currentTest++
-    let rest = `${ZWE} ${TESTS[test].parms}`;
+    let rest;
+    // parms XOR script
+    if (Boolean(TESTS[test].parms) !== Boolean(TESTS[test].script)) {
+        if (TESTS[test].parms) {
+            rest = `${ZWE} ${TESTS[test].parms}`;
+        } else {
+            rest = `${CONFIGMGR_SCRIPT} ${TESTS[test].script}`;
+        }
+    } else {
+        console.log('Only one must be defined: "parms" and "script"');
+        std.exit(1);
+    }
 
     let expectedRC = 0;
     let expectedOut = undefined;
@@ -97,15 +108,12 @@ for (let test in TESTS) {
     }
 
     let result;
-    if (Boolean(TESTS[test].parms) !== Boolean(TESTS[test].script)) {
-        console.log('Only one must be defined: "parms" and "script"');
-        std.exit(1);
-    }
     if (TESTS[test].parms) {
         result = shell.execOutSync('sh', '-c', `${EXPORT} && ${ZWE} ${TESTS[test].parms}`);
     } else {
         result = shell.execOutSync('sh', '-c', `${CONFIGMGR_SCRIPT} ${TESTS[test].script}`);
     }
+
     print.debug('Output', "\n" + result.out);
 
     let info = `expected rc=${expectedRC.toString().padStart(3)}, result rc=${result.rc.toString().padStart(3)}`;
