@@ -97,11 +97,11 @@ for (let test in TESTS) {
     }
 
     let result;
-    if (Boolean(parms) !== Boolean(script)) {
+    if (Boolean(TESTS[test].parms) !== Boolean(TESTS[test].script)) {
         console.log('Only one must be defined: "parms" and "script"');
         std.exit(1);
     }
-    if (parms) {
+    if (TESTS[test].parms) {
         result = shell.execOutSync('sh', '-c', `${EXPORT} && ${ZWE} ${TESTS[test].parms}`);
     } else {
         result = shell.execOutSync('sh', '-c', `${CONFIGMGR_SCRIPT} ${TESTS[test].script}`);
