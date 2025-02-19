@@ -107,6 +107,9 @@ for (let test in TESTS) {
         testResults.push(print.formatMsg(misc.SEVERITY_NUM.ERROR, PRINT, counter, info, rest));
     }
     const skipCounter = ' '.repeat(counter.length);
+    if (description) {
+        testResults.push(print.formatMsg(misc.SEVERITY_NUM.OTHER, PRINT, skipCounter, 'Description', description));
+    }
     if (expectedOut || expectedOut == '') {
         if (result.out == expectedOut) {
             testResults.push(print.formatMsg(misc.SEVERITY_NUM.INFO, PRINT, skipCounter, 'output match', ''));
@@ -114,12 +117,9 @@ for (let test in TESTS) {
             testResults.push(print.formatMsg(misc.SEVERITY_NUM.ERROR, PRINT, skipCounter, 'output not matched', ''));
         }
     }
-    if (description) {
-        testResults.push(print.formatMsg(misc.SEVERITY_NUM.OTHER, PRINT, skipCounter, 'Description', description));
-    }
 
-    misc.subStringInResult(expectedSubStr, true, result, testResults, skipCounter, PRINT);
-    misc.subStringInResult(expectedSubStrX, false, result, testResults, skipCounter, PRINT);
+    misc.subStringInResult(expectedSubStr, true, result.out, testResults, skipCounter, PRINT);
+    misc.subStringInResult(expectedSubStrX, false, result.out, testResults, skipCounter, PRINT);
 
     // *** After actions ***
     if (afterEnvironment.length) {
