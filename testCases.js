@@ -37,8 +37,10 @@ export const ALL = {
         parms: '--help'
     },
     helloWorld: {
-        expected: 0,
-        substr: 'Hello, world!',
+        expected: { 
+            rc: 0,
+            substr: 'Hello, world!',
+        },
         script: './scripts/helloWorld.js'
     }
 };
