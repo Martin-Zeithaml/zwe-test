@@ -21,8 +21,8 @@ $ ./initTemplate.sh /u/charles/zowe/
 
 ## Verify zwe-test
 
-Run `run_test.sh`, there is one predefined test: help for `zwe` command.
-If you can see the help and `Hello, world!`, it was set correctly.
+Run `run_test.sh`, there are 2 tests: help for `zwe` command and `helloWorld.js` script.
+If you can see the help and `Hello, world!`, everything was set correctly.
 
 ## Adding new tests
 
@@ -61,6 +61,7 @@ export const ALL = {
 * `desc` - description of a test
 * `before` and `after` actions
   * `listDS`, `listMB`, `deleteDS`, `allocJCL`, `allocLoad` and `shellCmd`
+    * _Note: `deleteDS` supports `MASK`_
 * `environment` variables, keep, restore or unset at the end of the current test
 * `expected` - if omitted, it is expected `rc=0`
   * `rc` - return code
@@ -68,6 +69,7 @@ export const ALL = {
   * `substrx` - substring NOT to be found
   * `out` - entire output to match
 * `parms` of the `zwe` command, `parms: "install --ds-prefix ZOWE --trace"`
+* `script` - path to the script, which will be executed by `configmgr`
 
 ### YAML
 
