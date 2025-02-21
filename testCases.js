@@ -12,7 +12,7 @@ const EXAMPLE = {
         ],
         before: {
             listMB: 'ZOWE.PARMLIB',                             // List memnbers
-            deleteDS: 'ZOWE.TMP',                               // Delete
+            deleteDS: 'ZOWE.TMP.**',                            // Delete (MASK is always used!)
             shellCmd: 'cat ./zowe.yaml && echo "Hello, world"'  // Shell command
         },
         expected: {
