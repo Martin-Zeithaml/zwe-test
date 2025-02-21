@@ -78,14 +78,13 @@ for (let test in TESTS) {
     // *** Before actions ***
     print.debug(`${counter}`, rest, print.YELLOW);
     if (TESTS[test].environment) {
-        TESTS[test].environment.forEach(env => {
+        TESTS[test].environment.forEach(item => {
             if (env[2] === undefined) {
-                afterEnvironment.push([env[0], '']);
+                afterEnvironment.push([item[0], '']);
+            } else if (item[2] === env.RESTORE) {
+                afterEnvironment.push([item[0], `${std.getenv(`${item[0]}`)}`]);
             }
-            if (env[2] === ENV_RESTORE) {
-                afterEnvironment.push([env[0], `${std.getenv(`${env[0]}`)}`]);
-            }
-            env.exportEnv(env[0], env[1]);
+            env.exportEnv(item[0], item[1]);
         })
     }
     beforeOrAfterActions(TESTS[test].before);
@@ -122,12 +121,12 @@ for (let test in TESTS) {
     misc.subStringInResult(expectedSubStrX, false, result.out, testResults, skipCounter, PRINT);
 
     // *** After actions ***
+    beforeOrAfterActions(TESTS[test].after);
     if (afterEnvironment.length) {
-        afterEnvironment.forEach(env => {
-            env.exportEnv(env[0], env[1]);
+        afterEnvironment.forEach(item => {
+            env.exportEnv(item[0], item[1]);
         })
     }
-    beforeOrAfterActions(TESTS[test].after);
 
     print.debug(`${counter}`, '-'.repeat(32) + "\n", print.YELLOW);
 

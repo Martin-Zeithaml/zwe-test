@@ -37,10 +37,19 @@ export const ALL = {
         parms: '--help'
     },
     helloWorld: {
-        expected: { 
+        environment: [
+            [ 'HELLOWORLD', 'Hello, world!' ]
+        ],
+        before: {
+            shellCmd: 'cat ./scripts/helloWorld.js'
+        },
+        expected: {
             rc: 0,
             substr: 'Hello, world!',
         },
-        script: './scripts/helloWorld.js'
+        script: './scripts/helloWorld.js',
+        after: {
+            shellCmd: 'echo "HELLOWORLD=${HELLOWORLD}"'
+        }
     }
 };
