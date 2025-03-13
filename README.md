@@ -14,10 +14,10 @@ Clone this repository to `uss`.
 
 ## Initialization
 
-Run `initTemplate.sh` with path to `zowe.runtimeDirectory` as a parameter:
-```
-$ ./initTemplate.sh /u/charles/zowe/
-```
+You need to set environment variable `ZWET_ZOWE_RUNTIME_DIRECTORY=/path/to/zowe/runtime`, there are several options:
+* Update `zowe.env` file
+* Add this variable to your shell profile
+* Start the script with export, for example `export ZWET_ZOWE_RUNTIME_DIRECTORY=/path/to/zowe/runtime && ./run_test.sh`
 
 ## Verify zwe-test
 

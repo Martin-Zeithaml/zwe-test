@@ -11,7 +11,7 @@ const EXAMPLE = {
             [ 'NODE_HOME', '/dev/null', env.RESTORE ]                                                   // Restore to original value
         ],
         before: {
-            listMB: 'ZOWE.PARMLIB',                             // List memnbers
+            listMB: 'ZOWE.PARMLIB',                             // List members
             deleteDS: 'ZOWE.TMP.**',                            // Delete (MASK is always used!)
             shellCmd: 'cat ./zowe.yaml && echo "Hello, world"'  // Shell command
         },
