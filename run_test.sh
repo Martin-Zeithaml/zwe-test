@@ -15,6 +15,8 @@ cd "${ZWET_ZOWE_RUNTIME_DIRECTORY}"
 zoweRuntimeAbsolutePath=$(pwd)
 cd "${currentDirectory}"
 
+export ZWET_ZOWE_RUNTIME_DIRECTORY="${zoweRuntimeAbsolutePath}"
+
 # Check/read symbolic link or create new one
 SYM_LINK='./lib/.zwe-test-zowe.runtimeDirectory'
 if [ -e "${SYM_LINK}" ]; then
