@@ -1,12 +1,12 @@
 import * as std from 'cm_std';
-import * as shell from '@RUNTIME@/bin/libs/shell'
+import * as shell from './lib/.zwe-test-zowe.runtimeDirectory/bin/libs/shell'
 import * as testCases from './testCases';
 import * as print from './lib/print';
 import * as ds from './lib/ds';
 import * as misc from './lib/misc';
 import * as env from './lib/env';
 
-const RUNTIME = '@RUNTIME@'
+const RUNTIME = './lib/.zwe-test-zowe.runtimeDirectory';
 const ZWE = `${RUNTIME}/bin/zwe`;
 const CONFIGMGR = `${RUNTIME}/bin/utils/configmgr`;
 const CONFIGMGR_SCRIPT = `${CONFIGMGR} -script`;
