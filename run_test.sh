@@ -1,12 +1,46 @@
 #!/bin/sh
 
-. ./zowe.env
+if  [ -z "${ZWET_ZOWE_RUNTIME_DIRECTORY}" ]; then
+    . ./zowe.env
+    if  [ -z "${ZWET_ZOWE_RUNTIME_DIRECTORY}" ]; then
+        echo "Environment variable 'ZWET_ZOWE_RUNTIME_DIRECTORY' not set."
+        echo "Update 'zowe.env' or set environment variable ZWET_ZOWE_RUNTIME_DIRECTORY=/path/to/zowe/runtime"
+        exit 1
+    fi
+fi
 
-ZWE_CFG="${ZWE_RUNTIME}/bin/utils/configmgr"
+# Make it absolute path
+currentDirectory=$(pwd)
+cd "${ZWET_ZOWE_RUNTIME_DIRECTORY}"
+zoweRuntimeAbsolutePath=$(pwd)
+cd "${currentDirectory}"
+
+export ZWET_ZOWE_RUNTIME_DIRECTORY="${zoweRuntimeAbsolutePath}"
+
+# Check/read symbolic link or create new one
+SYM_LINK='./lib/.zwe-test-zowe.runtimeDirectory'
+if [ -e "${SYM_LINK}" ]; then
+    if [ -L "${SYM_LINK}" ]; then
+        if [ "$(readlink ${SYM_LINK})" != "${zoweRuntimeAbsolutePath}" ]; then
+            echo "'${SYM_LINK}' is a soft link but does not point to '${zoweRuntimeAbsolutePath}'. Please move it out of the way and re-run this script."
+            exit 2
+        else
+            echo "'${SYM_LINK}' exists and points to ${zoweRuntimeAbsolutePath}"
+        fi
+    else
+        echo "${SYM_LINK} exists but is not a symbolic link. Remove it and re-run this script."
+        exit 3
+    fi
+else
+    echo "Linking '${zoweRuntimeAbsolutePath}' to '${SYM_LINK}'"
+    ln -s "${zoweRuntimeAbsolutePath}" "${SYM_LINK}"
+fi
+
+ZWET_CONFIGMGR="${zoweRuntimeAbsolutePath}/bin/utils/configmgr"
 unset FILE
 
 if [ "${1}" = "-p" ]; then
-    echo "${ZWE_RUNTIME}/bin/zwe"
+    echo "${zoweRuntimeAbsolutePath}/bin/zwe"
     exit
 fi
 
@@ -16,4 +50,4 @@ else
     FILE="${1}"
 fi
 
-"${ZWE_CFG}" -script "${FILE}"
+"${ZWET_CONFIGMGR}" -script "${FILE}"
