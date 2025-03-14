@@ -1,10 +1,12 @@
 import * as std from 'cm_std';
-import * as shell from './lib/.zwe-test-zowe.runtimeDirectory/bin/libs/shell'
+
 import * as testCases from './testCases';
-import * as print from './lib/print';
-import * as ds from './lib/ds';
-import * as misc from './lib/misc';
+import * as io from './lib/io';
 import * as env from './lib/env';
+import * as misc from './lib/misc';
+import * as print from './lib/print';
+
+import * as shell from './lib/.zwe-test-zowe.runtimeDirectory/bin/libs/shell'
 
 const RUNTIME = std.getenv('ZWET_ZOWE_RUNTIME_DIRECTORY');
 const ZWE = `${RUNTIME}/bin/zwe`;
@@ -19,11 +21,11 @@ const TESTS = {
 
 function beforeOrAfterActions(actions) {
     if (actions) {
-        ds.allocJCL(actions.allocJCL);
-        ds.allocLoad(actions.allocLoad);
-        ds.listMB(actions.listMB);
-        ds.listDS(actions.listDS)
-        ds.deleteDS(actions.deleteDS);
+        io.allocJCL(actions.allocJCL);
+        io.allocLoad(actions.allocLoad);
+        io.listMB(actions.listMB);
+        io.listDS(actions.listDS)
+        io.deleteDS(actions.deleteDS);
         misc.shellCmd(actions.shellCmd);
     }
 }
@@ -52,7 +54,7 @@ for (let test in TESTS) {
             rest = `${CONFIGMGR_SCRIPT} ${TESTS[test].script}`;
         }
     } else {
-        console.log('Only one must be defined: "parms" and "script"');
+        console.log('Only one must be defined: "parms" | "script"');
         std.exit(1);
     }
 
@@ -62,6 +64,7 @@ for (let test in TESTS) {
     let expectedSubStrX = undefined;
     let description = undefined;
 
+    // Exit uses only 0..255, check for modulo
     if (typeof TESTS[test].expected == 'number') {
         expectedRC = TESTS[test].expected % 256;
     }

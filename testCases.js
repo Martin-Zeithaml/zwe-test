@@ -1,13 +1,16 @@
-import * as yaml from './yamlFiles';
+import * as env from './lib/env';
+import * as io from './lib/io';
 import * as misc from './lib/misc';
 import * as print from './lib/print';
-import * as env from './lib/env'
+import * as string from './lib/string';
+import * as yaml from './yamlFiles';
+
 
 const EXAMPLE = {
     test1: {
         desc: "Description of the test scenario",
         environment: [
-            [ 'ZWE_CLI_PARAMETER_CONFIG', `${print.wrap('./file', 'ZOWE.PARMLIB(XYZ)')}`, env.KEEP ],   // Keep env for next text
+            [ 'ZWE_CLI_PARAMETER_CONFIG', `${string.wrap('./file', 'ZOWE.PARMLIB(XYZ)')}`, env.KEEP ],   // Keep env for next text
             [ 'NODE_HOME', '/dev/null', env.RESTORE ]                                                   // Restore to original value
         ],
         before: {
@@ -21,7 +24,7 @@ const EXAMPLE = {
             substr: ['To be found 1', 'To be found 2'],             // Substring in output
             substrx: ['Not to be found 1', 'Not to be found 2']     // Substring not in output
         },
-        parms: `init -c "${print.wrapAndEscape('./file$1', './file$2')}"`,  // Parameters, wrapAndEscape will escape \$
+        parms: `init -c "${string.wrapAndEscape('./file$1', './file$2')}"`,  // Parameters, wrapAndEscape will escape \$
         script: './test1.js',                                               // Mutually exclusive with parms
         after: {
             listMB: 'ZOWE.SZWESAMP',
