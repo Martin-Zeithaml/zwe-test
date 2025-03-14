@@ -15,7 +15,7 @@ Clone this repository to `uss`.
 ## Initialization
 
 You need to set environment variable `ZWET_ZOWE_RUNTIME_DIRECTORY=/path/to/zowe/runtime`, there are several options:
-* Update `zowe.env` file
+* Update `zwe-test.conf` file
 * Add this variable to your shell profile
 * Start the script with export, for example `export ZWET_ZOWE_RUNTIME_DIRECTORY=/path/to/zowe/runtime && ./run_test.sh`
 

@@ -1,10 +1,10 @@
 #!/bin/sh
 
 if  [ -z "${ZWET_ZOWE_RUNTIME_DIRECTORY}" ]; then
-    . ./zowe.env
+    . ./zwe-test.conf
     if  [ -z "${ZWET_ZOWE_RUNTIME_DIRECTORY}" ]; then
         echo "Environment variable 'ZWET_ZOWE_RUNTIME_DIRECTORY' not set."
-        echo "Update 'zowe.env' or set environment variable ZWET_ZOWE_RUNTIME_DIRECTORY=/path/to/zowe/runtime"
+        echo "Update 'zwe-test.conf' or set environment variable ZWET_ZOWE_RUNTIME_DIRECTORY=/path/to/zowe/runtime"
         exit 1
     fi
 fi
