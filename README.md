@@ -71,17 +71,3 @@ export const ALL = {
 * `parms` of the `zwe` command, `parms: "install --ds-prefix ZOWE --trace"`
 * `script` - path to the script, which will be executed by `configmgr`
 
-### YAML
-
-`yamlFiles.js` is used for creating YAML files, it is possible to save it as unix file or member. YAML is created from text, it is up to you to follow YAML syntax (no schema validation).
-
-Corresponding definition for previous test example:
-
-```javascript
-export const INSTALL = [
-    "zowe:",
-    "  setup:",
-    "    dataset:",
-    "      prefix: ZOWE.TEST"
-]
-```
