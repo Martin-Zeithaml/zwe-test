@@ -26,6 +26,11 @@ cd "${currentDirectory}"
 
 export ZWET_ZOWE_RUNTIME_DIRECTORY="${zoweRuntimeAbsolutePath}"
 
+if [ "${1}" = "-p" ]; then
+    echo "${zoweRuntimeAbsolutePath}/bin/zwe"
+    exit
+fi
+
 # Create symbolic link
 SYM_LINK='./lib/.zwe-test-zowe.runtimeDirectory'
 echo "Linking '${zoweRuntimeAbsolutePath}' to '${SYM_LINK}'"
@@ -33,11 +38,6 @@ ln -fs "${zoweRuntimeAbsolutePath}" "${SYM_LINK}"
 
 ZWET_CONFIGMGR="${zoweRuntimeAbsolutePath}/bin/utils/configmgr"
 unset FILE
-
-if [ "${1}" = "-p" ]; then
-    echo "${zoweRuntimeAbsolutePath}/bin/zwe"
-    exit
-fi
 
 if [ -z "${1}" ]; then
     FILE="./test.js"
