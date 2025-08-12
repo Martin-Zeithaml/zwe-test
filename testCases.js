@@ -55,3 +55,5 @@ export const ALL = {
         }
     }
 };
+
+console.log(print.simpleYamlSyntax(JSON.stringify(ALL, null, 2)));
