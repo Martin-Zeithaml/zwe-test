@@ -94,7 +94,7 @@ for (let test in TESTS) {
 
     let result;
     if (TESTS[test].parms) {
-        result = shell.execOutSync('sh', '-c', `${EXPORT} && ${ZWE} ${TESTS[test].parms}`);
+        result = shell.execOutSync('sh', '-c', `${EXPORT} && ${ZWE} ${TESTS[test].parms} 2>&1`);
     } else {
         result = shell.execOutSync('sh', '-c', `${CONFIGMGR_SCRIPT} ${TESTS[test].script}`);
     }

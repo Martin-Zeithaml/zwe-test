@@ -4,7 +4,6 @@ import * as misc from './lib/misc';
 import * as print from './lib/print';
 import * as string from './lib/string';
 
-
 const EXAMPLE = {
     test1: {
         desc: "Description of the test scenario",
